@@ -1,15 +1,15 @@
 <template>
     <Title>Login</Title>
     <VConfigProvider>
-        <VForm ref="form" :model="formModel" :rules="rules" hide-label>
+        <VForm ref="form" :rules="rules" :model="formModel" hide-label>
             <VFormItem prop="email">
                 <VInput placeholder="Email"></VInput>
             </VFormItem>
-            <VFormItem>
+            <VFormItem prop="password">
                 <VInput type="password" plain-password placeholder="Password"></VInput>
             </VFormItem>
             <VFormItem action>
-                <VFormSubmit @submit="handleSubmit" @errors="handleErrors">
+                <VFormSubmit @submit="handleSubmit">
                     Login
                 </VFormSubmit>
             </VFormItem>
@@ -19,6 +19,12 @@
 
 <script setup lang="ts">
 import type { VForm } from '#build/components';
+import { object, string, pipe, minLength, email, safeParse, flatten } from "@valibot/valibot";
+
+const LoginSchema = object({
+  email: pipe(string(), minLength(1), email()),
+  password: pipe(string(), minLength(5)),
+});
 
 definePageMeta({
     layout: 'auth',
@@ -26,26 +32,33 @@ definePageMeta({
 
 const form = ref<InstanceType<typeof VForm>>();
 
-const formModel = {};
+const formModel = {
+    email: "",
+    password: "",
+};
 
 const rules = {
     email: {
-        required: true,
-        // validator: (value: string) => true,
-        // message: "no email",
+        validator() {
+            const result = safeParse(LoginSchema, formModel);
+            if (!result.success) {
+                const { email } = flatten<typeof LoginSchema>(result.issues).nested!;
+                return [...(email ?? [])][0];
+            }
+            return true;
+        },
     },
     password: {
-        required: true,
-        // validator: (value: string) => true,
-        // message: "too weak",
+        validator() {
+            const result = safeParse(LoginSchema, formModel);
+            if (!result.success) {
+                const { password } = flatten<typeof LoginSchema>(result.issues).nested!;
+                return [...(password ?? [])][0];
+            }
+            return true;
+        },
     },
-}
+};
 
-function handleSubmit() {
-    console.log("login");
-}
-
-function handleErrors(errors: string[]) {
-    console.error(errors);
-}
+function handleSubmit() {}
 </script>
