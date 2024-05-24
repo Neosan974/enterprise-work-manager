@@ -21,6 +21,8 @@
 import type { VForm } from '#build/components';
 import { object, string, pipe, minLength, email, safeParse, flatten } from "@valibot/valibot";
 
+const supabase = useSupabaseClient()
+
 const LoginSchema = object({
   email: pipe(string(), minLength(1), email()),
   password: pipe(string(), minLength(5)),
@@ -60,5 +62,10 @@ const rules = {
     },
 };
 
-function handleSubmit() {}
+async function handleSubmit() {
+    await supabase.auth.signInWithPassword({
+        ...formModel,
+    });
+    navigateTo("/project");
+}
 </script>
