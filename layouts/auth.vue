@@ -7,19 +7,7 @@
     </main>
 </template>
 
-<style lang="scss">
-body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-}
-
-#__nuxt {
-    height: 100%;
-}
-</style>
-
-<style scoped lang="scss">
+<style lang="scss" scoped>
 main {
     display: flex;
     justify-content: center;
