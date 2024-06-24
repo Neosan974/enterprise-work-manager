@@ -7,8 +7,6 @@
 </template>
 
 <style lang="scss">
-@use "vexip-ui/style";
-
 .h-100 {
   height: 100%;
 }

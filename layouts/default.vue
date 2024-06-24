@@ -1,5 +1,5 @@
 <template>
-    <VLayout
+    <!-- <VLayout
         logo="https://www.vexipui.com/vexip-ui.svg"
         sign-name="Vexip UI"
         :user="layoutUser"
@@ -8,7 +8,7 @@
     >
         <template #header-user>
             <VDropdown>
-                <VAvatar circle>{{ user.email }}</VAvatar>
+                <VAvatar circle>{{ user?.email }}</VAvatar>
                 <template #drop>
                     <VDropdownList>
                         <VDropdownItem @click="logout">Logout</VDropdownItem>
@@ -21,19 +21,16 @@
                 <slot />
             </div>
         </template>
-    </VLayout>
+    </VLayout> -->
+    test
+    <slot />
 </template>
 
 <script setup lang="ts">
-import type { LayoutUser } from "vexip-ui";
 import { createMemoryHistory, createRouter } from "vue-router";
 
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
-const layoutUser = computed<LayoutUser>(() => ({
-    name: "",
-    email: user.value?.email
-}));
 const router = createRouter({
     history: createMemoryHistory(),
     routes: [],

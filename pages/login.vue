@@ -1,25 +1,19 @@
 <template>
     <Title>Login</Title>
-    <VConfigProvider>
-        <VForm ref="form" :rules="rules" :model="formModel" hide-label>
-            <VFormItem prop="email">
-                <VInput placeholder="Email"></VInput>
-            </VFormItem>
-            <VFormItem prop="password">
-                <VInput type="password" plain-password placeholder="Password"></VInput>
-            </VFormItem>
-            <VFormItem action>
-                <VFormSubmit @submit="handleSubmit">
-                    Login
-                </VFormSubmit>
-            </VFormItem>
-        </VForm>
-    </VConfigProvider>
+
+    <form @submit.prevent="handleSubmit">
+        <label for="email" class="block text-900 font-medium mb-2">Email</label>
+        <InputText id="email" type="text" class="w-full mb-3" />
+
+        <label for="password" class="block text-900 font-medium mb-2">Password</label>
+        <InputText id="password" type="password" class="w-full mb-3" />
+
+        <Button label="Sign In" class="w-full" @click="console.log" />
+    </form>
 </template>
 
 <script setup lang="ts">
-import type { VForm } from '#build/components';
-import { object, string, pipe, minLength, email, safeParse, flatten } from "@valibot/valibot";
+import { object, string, pipe, minLength, email, safeParse } from "@valibot/valibot";
 
 const supabase = useSupabaseClient()
 
@@ -32,39 +26,21 @@ definePageMeta({
     layout: 'auth',
 });
 
-const form = ref<InstanceType<typeof VForm>>();
+const username = ref<string>("");
+const password = ref<string>("");
 
-const formModel = {
-    email: "",
-    password: "",
-};
+async function handleSubmit(event: Event) {
+    console.log("klik");
+    const {success} = safeParse(LoginSchema, { email: username.value, password: password.value });
 
-const rules = {
-    email: {
-        validator() {
-            const result = safeParse(LoginSchema, formModel);
-            if (!result.success) {
-                const { email } = flatten<typeof LoginSchema>(result.issues).nested!;
-                return [...(email ?? [])][0];
-            }
-            return true;
-        },
-    },
-    password: {
-        validator() {
-            const result = safeParse(LoginSchema, formModel);
-            if (!result.success) {
-                const { password } = flatten<typeof LoginSchema>(result.issues).nested!;
-                return [...(password ?? [])][0];
-            }
-            return true;
-        },
-    },
-};
+    if (!success) {
+        console.error("login schema failed");
+        return;
+    }
 
-async function handleSubmit() {
     await supabase.auth.signInWithPassword({
-        ...formModel,
+        email: username.value,
+        password: password.value,
     });
     navigateTo("/project");
 }

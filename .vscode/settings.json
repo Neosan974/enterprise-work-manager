@@ -1,11 +1,13 @@
 {
   "[typescript]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
     "nuxt",
     "nuxtjs",
+    "primevue",
     "supabase",
+    "tailwindcss",
     "valibot",
     "vexip",
     "vueuse"
@@ -14,5 +16,12 @@
     "supabase/functions"
   ],
   "deno.lint": true,
-  "deno.unstable": true
+  "deno.unstable": true,
+  "cSpell.language": "en,fr",
+  "cSpell.languageSettings": [
+    {
+      "caseSensitive": false,
+      "languageId": []
+    }
+  ]
 }
