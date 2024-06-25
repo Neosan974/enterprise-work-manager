@@ -16,5 +16,5 @@ export default defineNuxtConfig({
   // importPT: {from: "~/presets/wind", as: "Wind"}
   // importPT: {from: "~/presets/aura", as: "Aura"}
   // importPT: {from: "~/presets/lara", as: "Lara"}
-}], "@nuxtjs/tailwindcss"],
+}], "@nuxtjs/tailwindcss", '@vee-validate/nuxt',],
 })
